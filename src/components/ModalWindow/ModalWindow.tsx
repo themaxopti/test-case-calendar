@@ -1,29 +1,15 @@
 import React, { useState } from "react";
 import s from "./ModalWindow.module.css";
 import { Box, Button, TextField } from "@mui/material";
-// import { DatePicker } from '@mui/';
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Eject } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { addEvent, editEvent } from "../../store/calendar.reducer";
 import moment from "moment";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
-
-interface Props {}
-
-// const InputData = ({ label, icon, value, setValue }) => {
-//   return (
-//     <div>
-
-//     </div>
-//   )
-// };
 
 interface ModalWindowProps {
   open: boolean;
@@ -65,15 +51,12 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
       const { date, name, notes, time } = values;
 
       if (
-        // date.length === 0 ||
         name!.length === 0 ||
         notes!.length === 0 ||
         time!.length === 0
       ) {
         return setError("Fill all values");
       }
-
-      // console.log(moment({da}));
 
       const dateMoment = moment(date || initialDate);
       const timeMoment = moment(time);
@@ -84,8 +67,6 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
 
       const startTime = timeMoment.clone();
       const endTime = timeMoment.clone().add(1, "hours");
-
-      console.log(startTime, endTime);
 
       if (mode === "add") {
         dispatch(
@@ -113,7 +94,6 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
       }
 
       setError(null);
-      console.log(values);
       setOpen(false);
     },
   });
@@ -136,16 +116,10 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              // @ts-ignore
               defaultValue={dayjs(formik.values.date)}
-              // @ts-ignore
               value={dayjs(formik.values.date)}
-              // @ts-ignore
-              // value={moment(initialDate)}
-              // @ts-ignore
               onChange={(value) => {
                 formik.setFieldValue("date", value!.format(""));
-                // console.log(value.format(""));
               }}
               slotProps={{
                 textField: {
@@ -159,10 +133,8 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
             />
             <TimePicker
               value={dayjs(formik.values.time)}
-              // defaultValue={moment(formik.values.time) as any}
               onChange={(value) => {
                 formik.setFieldValue("time", value!.format(""));
-                console.log(value!.format(""));
               }}
               slotProps={{
                 textField: {

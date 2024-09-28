@@ -38,10 +38,7 @@ const calendarSlice = createSlice({
         },
         editEvent: (state, action: PayloadAction<Event>) => {
             const {date,end,id,notes,start,title} = action.payload
-            console.log(id);
-            
             const event = state.events.find(el => el.id === id)
-            console.log(event);
             
             if(!event){
                 return

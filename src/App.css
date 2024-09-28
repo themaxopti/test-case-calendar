@@ -11,47 +11,27 @@
 
 .rbc-month-row{
   min-height: 135px;
-  /* padding-top: 15px; */
-  /* padding-right: 17px; */
 }
 
 .rbc-event{
   display: flex;
   padding-left: 14px;
-  /* justify-content: center; */
   align-items: center;
   height: 30px;
   background-color:#3B86FF !important;
-  /* padding-right: 5px; */
   font-size: 13px;
 }
 
 .rbc-event-content{
   width: 100%;
   height: 100%;
-  /* height: 30px;
-  background-color: #3B86FF;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center; */
 }
 
-/* .rbc-row {
-  min-height: 150px;
-} */
 
-/* .calendar .rbc-day-bg{
-  height: 135px;
-}
-
-.calendar .rbc-row-bg{
-  height: 135px;
-}
 
 .rbc-month-row{
   height: 135px;
-} */
+}
 
 
 /* Week */
@@ -82,15 +62,6 @@
   align-items: center;
 }
 
-.rbc-events-container{
-  /* background: #F5F6FA; */
-}
-
 .rbc-today{
   background: #F5F6FA !important;
 }
-
-/* .rbc-header{
-  border-right:none ;
-  border-left:none ;
-} */
