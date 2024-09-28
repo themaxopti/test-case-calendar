@@ -1,0 +1,36 @@
+.modal{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    /* position: absolute; */
+    /* top: 20px; */
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 10000000 !important;
+    width: 200px;
+    min-height: 275px;
+    padding: 15px;
+}
+
+
+.modal .modal__content {
+    z-index: 10000000 !important;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.modal .modal__buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-arrow{
+    position: absolute;
+    top: -19px;
+    left: 50%;
+    transform: translateX(-50%);
+}

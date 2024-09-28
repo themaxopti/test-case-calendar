@@ -1,0 +1,9 @@
+.calendar {
+    /* background-color: red; */
+    /* color:   blue; */
+}
+
+.calendar .rbc-header{
+    padding: 0 !important;
+    color: red;
+}
