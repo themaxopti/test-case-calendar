@@ -5,7 +5,7 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import s from "./calendar.module.css";
 import { ModalWindow } from "./components/ModalWindow/ModalWindow";
-import { Popover, Typography } from "@mui/material";
+import { Button, ButtonGroup, Popover, Typography } from "@mui/material";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { useSelector } from "react-redux";
 import { eventsSelector } from "./store/calendar.reducer";
@@ -13,6 +13,8 @@ import { eventsSelector } from "./store/calendar.reducer";
 const localizer = momentLocalizer(moment);
 
 const Header = (props: any) => {
+  // console.log(props);
+
   return (
     <div
       style={{
@@ -25,6 +27,26 @@ const Header = (props: any) => {
       }}
     >
       <div>{props.label.toUpperCase()}</div>
+    </div>
+  );
+};
+
+const WeekHeader = (props: any) => {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "45px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#F5F6FA",
+        padding: "0px",
+      }}
+    >
+      <div>
+        <strong>{moment(props.date).format("ddd MM/DD")}</strong>
+      </div>
     </div>
   );
 };
@@ -44,11 +66,6 @@ const CustomDateCell = (props: any) => {
   return (
     <>
       <div
-        onClick={(e) => {
-          // console.log("hi");
-          // setOpen(true);
-          // handleClick(e);
-        }}
         className="custom-date-cell"
         style={{
           marginRight: "10px",
@@ -84,27 +101,8 @@ const CustomDateCell = (props: any) => {
   );
 };
 
-const MonthRow = ({ value, children }: any) => {
-  return (
-    <div
-      style={{
-        // backgroundColor: isWeekend ? '#ffcccc' : '#ccffcc',
-        // height: '135px',
-        position: "relative",
-        minHeight: "135px",
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-function Component(props: any) {
-  return <>121321</>;
-}
-
 const CustomEvent = ({ event, ...props }: any) => {
-  console.log(event);
+  // console.log(event);
 
   const [open, setOpen] = useState(false);
   const day = moment(props.date).format("D");
@@ -138,6 +136,7 @@ const CustomEvent = ({ event, ...props }: any) => {
           title={event.title}
           notes={event.notes}
           initialDate={props.date}
+          id={event.id}
           open={open}
           setOpen={setOpen}
         />
@@ -146,9 +145,126 @@ const CustomEvent = ({ event, ...props }: any) => {
   );
 };
 
+function Toolbar(props: any) {
+  const goToBack = () => {
+    let mDate = props.date;
+    let newDate = new Date(mDate);
+    newDate.setMonth(mDate.getMonth() - 1);
+    props.onNavigate("PREV");
+  };
+
+  const goToNext = () => {
+    let mDate = props.date;
+    let newDate = new Date(mDate);
+    newDate.setMonth(mDate.getMonth() + 1);
+    props.onNavigate("NEXT");
+  };
+
+  const goToCurrent = () => {
+    let now = new Date();
+    props.onNavigate("TODAY", now);
+  };
+
+  const goToMonthView = () => {
+    props.onView("month");
+  };
+
+  const goToWeekView = () => {
+    props.onView("week");
+  };
+
+  const goToDayView = () => {
+    props.onView("day");
+  };
+
+  return (
+    <div className={s["toolbar"]}>
+      {/* <h4 style={{ color: "#4D4F5C" }}>Calendar View</h4> */}
+      <div className="back-next-buttons">
+        <Button
+          onClick={goToCurrent}
+          variant="outlined"
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+        >
+          <span className="label-filter-off">Today</span>
+        </Button>
+        <Button
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+          variant="outlined"
+          className={s["toolbar__button"]}
+          onClick={goToBack}
+        >
+          <span className="label-filter-off">Back</span>
+        </Button>
+        <Button
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+          variant="outlined"
+          className={s["toolbar__button"]}
+          onClick={goToNext}
+        >
+          <span className="label-filter-off">Next</span>
+        </Button>
+      </div>
+
+      <div>
+        <label className="label-date">{moment(props.date).format('MMMM YYYY')}</label>
+      </div>
+
+      <div className="filter-container">
+        <Button
+          onClick={goToMonthView}
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+        >
+          <span className="label-filter-off">Month</span>
+        </Button>
+        <Button
+          onClick={goToWeekView}
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+        >
+          <span className="label-filter-off">Week</span>
+        </Button>
+        <Button
+          onClick={goToDayView}
+          sx={{
+            background: "white",
+            color: "black",
+            border: "2px solid #D8DBE2",
+          }}
+        >
+          <span className="label-filter-off">Day</span>
+        </Button>
+        {/* <Button className="bg-filter-off">
+            <span className="label-filter-off">Year</span>
+          </Button> */}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const events = useSelector(eventsSelector);
 
+  const [currentView, setCurrentView] = useState("month");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -163,25 +279,12 @@ function App() {
 
   const open = Boolean(anchorEl);
 
-  // const [events, setEvents] = useState([
-  //   {
-  //     title: "Sample Event",
-  //     start: new Date(),
-  //     end: new Date(moment().add(1, "hours") as any),
-  //     test:2,
-  //   },
-  //   {
-  //     title: "Sample Event",
-  //     start: new Date(),
-  //     end: new Date(moment().add(1, "hours") as any),
-  //   },
-  // ]);
-
   return (
     <>
-      {/* <ModalWindow /> */}
       <div>
         <Calendar
+          defaultView="month"
+          onView={(view) => setCurrentView(view)}
           // @ts-ignore
           onSelectSlot={() => {
             console.log("gi");
@@ -195,7 +298,8 @@ function App() {
           startAccessor="start"
           endAccessor="end"
           components={{
-            header: Header,
+            toolbar: Toolbar,
+            // header: Header,
             // dateCellWrapper: Component,
             // dayColumnWrapper:Component,
             // day:{
@@ -204,8 +308,12 @@ function App() {
             // },
             month: {
               dateHeader: CustomDateCell,
+              header: Header,
               // header:Component
               // event:Component
+            },
+            week: {
+              header: WeekHeader,
             },
             event: CustomEvent,
           }}
@@ -213,7 +321,6 @@ function App() {
         />
       </div>
       <Popover
-        // id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}

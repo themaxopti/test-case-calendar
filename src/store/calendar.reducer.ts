@@ -4,7 +4,7 @@ import moment from 'moment'
 import { v4 as uuidv4 } from "uuid";
 
 interface Event {
-    id: string
+    id?: string
     title: string,
     start: string,
     end: string
@@ -36,11 +36,28 @@ const calendarSlice = createSlice({
         addEvent: (state, action: PayloadAction<Event>) => {
             state.events?.push(action.payload)
         },
+        editEvent: (state, action: PayloadAction<Event>) => {
+            const {date,end,id,notes,start,title} = action.payload
+            console.log(id);
+            
+            const event = state.events.find(el => el.id === id)
+            console.log(event);
+            
+            if(!event){
+                return
+            }
+            event.end = end
+            event.notes = notes
+            event.start = start
+            event.title = title
+            event.date = date
+        },
     },
 })
 
 export const {
-    addEvent
+    addEvent,
+    editEvent
 } = calendarSlice.actions
 
 

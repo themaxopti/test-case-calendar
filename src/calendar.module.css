@@ -7,3 +7,18 @@
     padding: 0 !important;
     color: red;
 }
+
+.toolbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.toolbar__button{
+    background-color: red;
+    background: white;
+    color:black;
+    border: 2px solid #D8DBE2;
+}

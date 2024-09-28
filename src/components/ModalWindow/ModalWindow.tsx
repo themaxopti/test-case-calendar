@@ -10,7 +10,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Eject } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { addEvent } from "../../store/calendar.reducer";
+import { addEvent, editEvent } from "../../store/calendar.reducer";
 import moment from "moment";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
@@ -34,6 +34,7 @@ interface ModalWindowProps {
   title?: string;
   date?: string;
   notes?: string;
+  id?: string;
 }
 
 export const ModalWindow: React.FC<ModalWindowProps> = ({
@@ -45,16 +46,18 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
   start,
   title,
   notes,
+  id,
 }) => {
   const [error, setError] = useState<string | null>(null);
-  console.log(moment(initialDate).format("YYYY-MM-DDTHH:mm:ssZ"));
-
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
       name: mode === "edit" ? title : "",
-      date: mode === "edit" ? moment(date).format("YYYY-MM-DDTHH:mm:ssZ") : moment(initialDate).format("YYYY-MM-DDTHH:mm:ssZ"),
+      date:
+        mode === "edit"
+          ? moment(date).format("YYYY-MM-DDTHH:mm:ssZ")
+          : moment(initialDate).format("YYYY-MM-DDTHH:mm:ssZ"),
       time: mode === "edit" ? start : "",
       notes: mode === "edit" ? notes : "",
     },
@@ -84,16 +87,30 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
 
       console.log(startTime, endTime);
 
-      dispatch(
-        addEvent({
-          id: uuidv4(),
-          start: new Date(startTime as any) as any,
-          end: new Date(endTime as any) as any,
-          title: name!,
-          date: new Date(dateMoment as any),
-          notes: notes!,
-        })
-      );
+      if (mode === "add") {
+        dispatch(
+          addEvent({
+            id: uuidv4(),
+            start: new Date(startTime as any) as any,
+            end: new Date(endTime as any) as any,
+            title: name!,
+            date: new Date(dateMoment as any),
+            notes: notes!,
+          })
+        );
+      }
+      if (mode === "edit") {
+        dispatch(
+          editEvent({
+            start: new Date(startTime as any) as any,
+            end: new Date(endTime as any) as any,
+            title: name!,
+            date: new Date(dateMoment as any),
+            notes: notes!,
+            id,
+          })
+        );
+      }
 
       setError(null);
       console.log(values);
@@ -108,7 +125,6 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
         className={s.modal}
         style={{ display: open ? "flex" : "none" }}
       >
-        <Eject className={s["modal-arrow"]} />
         <div className={s.modal__content}>
           <TextField
             onChange={formik.handleChange}
@@ -142,7 +158,8 @@ export const ModalWindow: React.FC<ModalWindowProps> = ({
               label="event date"
             />
             <TimePicker
-              defaultValue={moment(formik.values.time) as any}
+              value={dayjs(formik.values.time)}
+              // defaultValue={moment(formik.values.time) as any}
               onChange={(value) => {
                 formik.setFieldValue("time", value!.format(""));
                 console.log(value!.format(""));

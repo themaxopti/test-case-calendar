@@ -52,3 +52,45 @@
 .rbc-month-row{
   height: 135px;
 } */
+
+
+/* Week */
+
+.rbc-allday-cell{ 
+  display: none;
+}
+
+.rbc-button-link{
+  width: 100%;
+}
+
+.rbc-time-header{
+  background-color:#F5F6FA ;
+}
+
+.rbc-timeslot-group{
+  min-height: 50px !important;
+  
+}
+.rbc-time-slot:last-child{
+  display: none;
+}
+
+.rbc-time-slot:first-child{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rbc-events-container{
+  /* background: #F5F6FA; */
+}
+
+.rbc-today{
+  background: #F5F6FA !important;
+}
+
+/* .rbc-header{
+  border-right:none ;
+  border-left:none ;
+} */
